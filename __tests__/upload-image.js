@@ -1,27 +1,31 @@
 var invoke = require('../build/actions/upload-image').invoke;
-
-var actionName = 'upload-image';
-
-var globals = {
-    authdata: {
-
+var actionName = 'get-tenant-root-site';
+var my_access_token     = 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IkFRQUJBQUFBQUFCSGg0a21TX2FLVDVYcmp6eFJBdEh6cmU1NW9FZ3o3eXhtMURnUmx6cWVnWnpCQTk3YmNPck1TZ0ctZnJ2YjdleHlJVTFDbFZwN2QxSXd4V1Atd0RPVzhDRUhvUE5CT3Vfc05PN3V1RWlnZkNBQSIsImFsZyI6IlJTMjU2IiwieDV0IjoiU1NRZGhJMWNLdmhRRURTSnhFMmdHWXM0MFEwIiwia2lkIjoiU1NRZGhJMWNLdmhRRURTSnhFMmdHWXM0MFEwIn0.eyJhdWQiOiJodHRwczovL2dyYXBoLm1pY3Jvc29mdC5jb20iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC81MzU1NDlmMy1mODYxLTQ0ZDAtOTc3YS0wZmFkMWY4ZGFmMDkvIiwiaWF0IjoxNTE5NjYzOTIyLCJuYmYiOjE1MTk2NjM5MjIsImV4cCI6MTUxOTY2NzgyMiwiYWNyIjoiMSIsImFpbyI6IlkyTmdZS2hNV1NFZW96THYzWlNpUHVXZnJtcVZxbW9QMi9ybithZE9jZHExdWYzbTFKVUEiLCJhbXIiOlsicHdkIl0sImFwcF9kaXNwbGF5bmFtZSI6IkJaQ29uMiIsImFwcGlkIjoiM2MwYmZlZDQtY2VjZi00YWU5LTlkMDAtYjEwZWNlZDRkODYwIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJSYW1pcmV6IiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJpcGFkZHIiOiIxOTAuODUuMTU0LjEyOSIsIm5hbWUiOiJJdmFuIFJhbWlyZXoiLCJvaWQiOiI0NDJjN2FiNC0xMjEwLTQwODAtODA1OS04MWJlMDdjNzU2Y2QiLCJwbGF0ZiI6IjMiLCJwdWlkIjoiMTAwMzdGRkVBOEFDMkMxMyIsInNjcCI6IkZpbGVzLlJlYWRXcml0ZS5BbGwgU2l0ZXMuUmVhZFdyaXRlLkFsbCBVc2VyLlJlYWRXcml0ZS5BbGwiLCJzaWduaW5fc3RhdGUiOlsia21zaSJdLCJzdWIiOiJDU2FRNjNITGxpVk9Jc1p2NFFHbDA5WmRBLWJHQ200UHljcHNWWk9QbXhjIiwidGlkIjoiNTM1NTQ5ZjMtZjg2MS00NGQwLTk3N2EtMGZhZDFmOGRhZjA5IiwidW5pcXVlX25hbWUiOiJpcmFtaXJlekBuYXRpdmFwcHNjLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6ImlyYW1pcmV6QG5hdGl2YXBwc2Mub25taWNyb3NvZnQuY29tIiwidXRpIjoiQmNJSUUzNmhMRXFpaEJvUGJUVWFBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIl19.cow2-VUpVp6b6wbblnQMsSfLKFKuXqiEgDPu6UT08fC-iG3PXwH4F2_JnkRGbeZMuB47V5o09fK4_nHQLCjkIcs9LqBoXprVhxQu0p57Lmekr0S4-dZ4Kxc9b6kkrNnq9W5KWurTwLot2R7yE_4Z3xOo_lfq7WIStVphvNR68p5s6IgBgsWw-MRafUqI6LAmEkUDMuR9EQnZUuZ8u0yC1_Drjc24j1Mhs35sQvt17znzHeYOh_y_d9ODEewDh1cmTKpJW5kz_PETWkq2DBt-62ixKgbLqa3swCHLpkXh5Z7vR6C-o14QhwmOt9O2quKrtP240lAt0KbL3GPCKXVrlw';
+var my_refresh_token    = 'OAQABAAAAAABHh4kmS_aKT5XrjzxRAtHz6badgxC08JI8zb8kVSr0FO_GJfhhfC8cnV59m9Tj58S9a1lUMQUVpOQcs9j7imnnw7TJfRrDvfa_P_aJZNQ4C_Kb_xTl4P8TCOfWp1wbglRybm52_cM4Ygo0LzFkxKm7qN9DfQQQr5iwxrmXdqTr70dwjf0_zjgepbG8_g3RQrjeWpj1S_sIoGCFZoXobu4ykc2y6xN6QRqJKYuVcvFU9BQ_S4eV3OrSCOuZh9fNna5xbX9rcpaUUXw8BuVePCOQsZ-XqYQtwhC_drqly1eurB429Dte1Y4fj_SGPxC7EUxN9kv_Z6Gx-MzzZ4cdUZ_g3ZKSZBNc4pqMKFChSV3IAJ4Sv1uImoNzf0bZkq0Nq3EYu7aYM1nnYoER95bipgTQd4T8b5Y0kR73nDTnb_Eeqf918vs4-weaYZQ2ShqE4D1hrCcL42gn29wgGAljHHnREPRAdM-zkB5Gb0-2HqMcOTkZJtafVE4PjFgqADdWQ8tyfmytmIZfWMNyALLlW-pYJwhIoUBbwm6-GiBmSnv0b5j3OHtyNsvRR6Mo0wH1fy_Smx3Dj5yb_EFyF5cW6v2ms8uWZkcc9SYzUIAGqgo4XWD4ZdW_vksReN-2qdjmWGDvlonlJKE0WTMw6PPDRvkp6bYu2fAMc_6AHjtanLTP7J3D9ts9idZB1LYlzhHquqGCym1cPN0nlZVqEd5OW1gMe1yeIIvRYajDImdgwPr24k7O6BYCgy3uYOQaJaEceqGm24gbg8Z1PAKp3kuzDHYvgy6Xf5OXsRN5RH2tlwXS_WFFsck4n-kbsl_Mt6xfITEgAA';
+var globals = 
+{
+    authdata:
+    {
+        client_id: '3c0bfed4-cecf-4ae9-9d00-b10eced4d860',
+        client_secret: 'dsmANU890:@nxusEQWI49@;',
+        scope: 'offline_access openid profile User.Readwrite.all files.readwrite.all sites.readwrite.all',
+        rediect_url: 'https://office.com',
+        access_token: my_access_token,
+        refresh_token: my_refresh_token,
     }
 };
-
-var data = {
+var data = 
+{
     inputs: {
-        input: {
-
+        input: 
+        {
         }
     }
 };
-
 var authenticationType = 'custom';
-
 var LOG = console;
-
-var callback = function(reply) {
+var callback = function(reply) 
+{
     console.log('Action replied.', JSON.stringify(reply, null, 2));
 };
-
 invoke(globals, actionName, data, authenticationType, LOG, callback);

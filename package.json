@@ -1,0 +1,45 @@
+{
+  "name": "custom-connector-name",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "cross-env NODE_ENV=test node_modules/.bin/jest",
+    "dev": "npm run babel-node",
+    "babel-node": "cross-env node_modules/.bin/babel src --out-dir ./build/actions --watch",
+    "build": "cross-env node_modules/.bin/bz-def && npm run setup && npm run define && npm run production && npm run bundle && npm run clear",
+    "setup": "cross-env node_modules/.bin/cpr package.json ./build/package.json && cross-env node_modules/.bin/cpr README.md ./build/README.md",
+    "define": "npm run define:clear && npm run define:copy && cross-env node_modules/.bin/rimraf def",
+    "define:clear": "cross-env node_modules/.bin/rimraf ./build/def && cross-env node_modules/.bin/rimraf ./build/actions.js",
+    "define:copy": "cross-env node_modules/.bin/cpr ./def/connector.json ./build/def/connector.json && cross-env node_modules/.bin/cpr ./def/actions.js ./build/actions.js",
+    "production": "npm --prefix ./build install --production --legacy-bundling ./build",
+    "bundle": "cross-env node_modules/.bin/bz-zip compress build",
+    "clear": "cross-env node_modules/.bin/rimraf build/node_modules && cross-env node_modules/.bin/rimraf build/def && cross-env node_modules/.bin/rimraf build/actions.js && cross-env node_modules/.bin/rimraf build/package.json && cross-env node_modules/.bin/rimraf build/README.md && cross-env node_modules/.bin/rimraf def"
+  },
+  "description": "Information about this connector",
+  "author": {
+    "name": "Your name of course",
+    "email": "iamawesome@gmail.com"
+  },
+  "dependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-runtime": "^6.26.0",
+    "bz-util": "^2.1.0",
+    "node-fetch": "^1.7.3",
+    "regenerator-runtime": "^0.11.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "bz-define": "0.0.3",
+    "bz-zip": "^1.1.11",
+    "cpr": "^2.2.0",
+    "cross-env": "^5.1.3",
+    "jest": "^21.2.1",
+    "rimraf": "^2.6.2"
+  }
+}
